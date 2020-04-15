@@ -1,38 +1,40 @@
 import React, {Component} from "react";
 import {connect} from "react-redux"
-
 // import { useRef, useEffect, useState } from 'react';
-
-import {Map, APILoader} from '@uiw/react-baidu-map';
-
-import {getCityList, changeCurrentCity} from "./store/actionCreators"
-import store from "./store";
-
+import { Map, APILoader } from '@uiw/react-baidu-map';
+import {getCityList, changeCurrentCity,} from "./store/actionCreators"
 
 class VipMap extends Component {
 
   render() {
-    const {list, handleClick, currentCity} = this.props;
+    const {list, handleClick, currentCity, currentZoom} = this.props;
 
     return (
       <div >
-        <div style={{width: '80%', height: 'auto', margin: '0 auto', border: '1px solid #000', marginTop: '50px',}}>
+        <div style={{width: '80%', height: 'auto', margin: '0 auto', border: '1px solid #000', marginTop: '50px'}}>
           {
             Object.keys(list).map((item, index) => {
               // var city = item.city;
               return <button
-                onClick={() => handleClick({item})}
+                onClick={() => handleClick({item},13)}
                 key={index}>{item}
-                {/*style={{float:'left',}}*/}
               </button>
             })
+
           }
+          <button onClick={() => handleClick("北京", 5)}>全国</button>
+          <div>
+            {currentZoom}
+            {currentCity}
+          </div>
         </div>
 
-        <div style={{width: '80%', height: '600px', margin: '0 auto', border: '1px solid #000', marginTop: '2px',}}>
-
+        <div style={{width: '80%', height: '700px', margin: '0 auto', border: '1px solid #000', marginTop: '2px',}}>
           <APILoader akay="X3dS7gyDF4AFBDzF9wWcn3CY49Di4sYQ">
-            <Map enableScrollWheelZoom={this.enableScrollWheelZoom} zoom={12} center={currentCity}/>
+            <Map zoom={currentZoom} center={currentCity} enableScrollWheelZoom={true}/>
+            {/*<Map zoom={12} center={currentCity} enableScrollWheelZoom={true}/>*/}
+            {/*<Map center={currentCity} enableScrollWheelZoom={true}/>*/}
+            {/*<Map center={currentCity}/>*/}
           </APILoader>
         </div>
       </div>
@@ -41,30 +43,41 @@ class VipMap extends Component {
   }
 
   componentDidMount() {
-    const action = getCityList()
-    store.dispatch(action)
+    this.props.changeCityList();
+    // this.bindEvents();
   }
 }
 
 // link 规则（方式）映射关系
-const mapStateToProps = (state) => {
+const mapState = (state) => {
   return {
-    list: state.cityList,
-    currentCity: state.currentCity,
+    list: state.getIn(['vipmap','cityList']),
+    currentCity: state.getIn(['vipmap','currentCity']),
+    currentZoom: state.getIn(['vipmap','currentZoom']),
   }
 };
 
 // redux 数据修改逻辑映射 store.dispatch, props
-const mapDispatchToProps = (dispatch) => {
+const mapDispatch = (dispatch) => {
   return {
+    // load city list
+    changeCityList(){
+      dispatch(getCityList())
+    },
+
     // city btn click
-    handleClick(e) {
-      const action = changeCurrentCity(e.item);
+    handleClick(city, zoom) {
+
+      if (typeof city === 'object'){
+        city = city.item
+      }
+
+      const action = changeCurrentCity(city, zoom);
       dispatch(action)
-    }
+    },
 
   }
 };
 
 // 组件是通过connect获取到state的数据
-export default connect(mapStateToProps, mapDispatchToProps)(VipMap)
+export default connect(mapState, mapDispatch)(VipMap)

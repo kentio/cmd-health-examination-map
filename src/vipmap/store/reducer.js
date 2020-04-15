@@ -1,28 +1,32 @@
-import {INIT_CITY_LIST, CHANGE_CURRENT_CITY} from './constants'
+import * as constants from './constants';
+import { fromJS} from 'immutable';
 
-const defaultState = {
+const defaultState = fromJS({
   cityList: [],
-  currentCity: "上海",
-};
+  currentCity: "北京",
+  currentZoom: 5,
+});
 
+
+const changeCurrentCity = (state, action) => {
+  var result = {"currentCity": action.currentCity,}
+
+  if (action.currentZoom !== state.get('currentZoom')){
+    result['currentZoom'] = action.currentZoom
+  }
+  return state.merge(result)
+}
 
 // state    整个DOM的数据库
 // action
 // reducer 可以接收state，但是不可以在修改stacurrentCityte
 export default (state = defaultState, action) => {
-
-  // redux ajax
-  if (action.type === INIT_CITY_LIST){
-    const newState = JSON.parse(JSON.stringify(state)); // create new state
-    newState.cityList = action.data;
-    return newState;
+  switch(action.type) {
+    case constants.INIT_CITY_LIST:
+      return state.set("cityList", action.cityList)
+    case constants.CHANGE_CURRENT_CITY:
+      return changeCurrentCity(state, action)
+    default:
+      return state;
   }
-  // change current city
-  if (action.type === CHANGE_CURRENT_CITY) {
-    const newState = JSON.parse(JSON.stringify(state)); // create new state
-    newState.currentCity = action.value;
-    return newState
-  }
-
-  return state;
 }

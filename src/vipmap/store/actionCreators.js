@@ -1,41 +1,41 @@
 import axios from "axios"
-import {INIT_CITY_LIST, CHANGE_CURRENT_CITY} from './constants'
+import * as constants from './constants';
 
-export const defaultListData = [
-  '明天11点开小组会议.',
-];
-
-export const changeCurrentCity = (value) => ({
-  type: CHANGE_CURRENT_CITY,
-  value,
+export const changeCurrentCity = (city, zoom) => ({
+  type: constants.CHANGE_CURRENT_CITY,
+  currentCity: city,
+  currentZoom: zoom,
 })
 
-export const InitCityList = (data) => ({
-  type: INIT_CITY_LIST,
-  data
+export const InitCityList = (result) => ({
+  type: constants.INIT_CITY_LIST,
+  cityList: result,
 });
 
+export const changeCurrentZoom = (value) => ({
+  type: constants.CHANGE_CURRENT_ZOOM,
+  value,
+})
 
 // 使用了 redux-thunk 之后 返回可以是一个函数
 export const getCityList = () => {
   return (dispatch) => { // dispatch: 如果action是函数的话会自动接收到dispatch方法
     // ajax request
-    axios.get("/data.json").then((res) => {
+    var url = window.location.href
+    axios.get(url + "/data.json").then((res) => {
       const data = res.data.data
 
       // 数据处理 原数据是data.json
-      var tmp = {};
+      var result = {};
       for ( var i=0; i<data.length; i++){
         var city = data[i].city;
-        if (city in tmp){
-          tmp[city].push(data[i])
+        if (city in result){
+          result[city].push(data[i])
         }else {
-          tmp[city] = [data[i]]
+          result[city] = [data[i]]
         }
       }
-
-      const action = InitCityList(tmp) // action change store
-      dispatch(action)
+      dispatch(InitCityList(result)) // action change store
 
       }).catch(() => { // ajax request error
         console.log("error")
