@@ -1,4 +1,4 @@
-module github.com/kentio/cmd-health-examination
+module github.com/kentio/cmd-health-examination-map
 
 go 1.13
 

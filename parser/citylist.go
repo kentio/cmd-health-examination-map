@@ -2,8 +2,8 @@ package parser
 
 import (
 	"fmt"
-	"github.com/kentio/cmd-health-examination/config"
-	"github.com/kentio/cmd-health-examination/engine"
+	"github.com/kentio/cmd-health-examination-map/config"
+	"github.com/kentio/cmd-health-examination-map/engine"
 	"regexp"
 )
 
@@ -20,7 +20,7 @@ func ParseCityList(contents []byte) engine.ParseResult {
 		result.Requests = append(
 			result.Requests,
 			engine.Request{
-				Url: config.BaseUrl + string(m[1]),
+				Url:        config.BaseUrl + string(m[1]),
 				ParserFunc: ParseCity})
 		fmt.Printf("%s %s\n", m[1], m[2])
 	}

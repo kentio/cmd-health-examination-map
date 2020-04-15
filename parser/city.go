@@ -3,11 +3,10 @@ package parser
 import (
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
-	"github.com/kentio/cmd-health-examination/config"
-	"github.com/kentio/cmd-health-examination/engine"
-	"github.com/kentio/cmd-health-examination/model"
+	"github.com/kentio/cmd-health-examination-map/config"
+	"github.com/kentio/cmd-health-examination-map/engine"
+	"github.com/kentio/cmd-health-examination-map/model"
 	"log"
-	"regexp"
 	"strings"
 )
 
@@ -17,36 +16,28 @@ func ParseCity(contents []byte) engine.ParseResult {
 	var city string
 
 	dom, err := goquery.NewDocumentFromReader(strings.NewReader(string(contents)))
-	if err != nil{
+	if err != nil {
 		log.Fatalln(err)
 	}
+	// data struct
+	result := engine.ParseResult{}
+
 	// curtury city
 	dom.Find("strong").Each(func(i int, selection *goquery.Selection) {
 		city = selection.Text()
 		fmt.Println(i, city)
 	})
 	dom.Find("li").Each(func(i int, selection *goquery.Selection) {
-		title := selection.Find("h3").Text()
-		//content := strings.TrimSpace(selection.Find("p").Text())
-		content := ""
+		detail := model.Hospital{City: city}
+		detail.Name = selection.Find("h3").Text()
+
 		selection.Find("p").Each(func(i int, selection *goquery.Selection) {
-			content += selection.Text() + "\n"
+			detail.Content += selection.Text() + "\n"
 		})
-
-		config.DataDB.Create(&model.Hospital{City: city, Name: title, Content: content})
+		// save data to db
+		fmt.Println(detail.Content)
+		result.Items = append(result.Items, detail)
+		config.DataDB.Create(&detail)
 	})
-
-
-	// xxx
-	re := regexp.MustCompile(cityListRe)
-	matches := re.FindAllSubmatch(contents, -1)
-
-	result := engine.ParseResult{}
-	for _, m := range matches {
-		result.Items = append(result.Items, string(m[2]))
-		result.Requests = append(result.Requests, engine.Request{Url: config.BaseUrl + string(m[1]), ParserFunc: engine.NilParser})
-		fmt.Printf("%s %s\n", m[1], m[2])
-	}
-	fmt.Println(len(matches))
 	return result
 }
