@@ -7,10 +7,24 @@ export const changeCurrentCity = (city, zoom) => ({
   currentZoom: zoom,
 })
 
-export const InitCityList = (result) => ({
-  type: constants.INIT_CITY_LIST,
-  cityList: result,
-});
+export const InitCityList = (data) => {
+
+  // 数据处理 原数据是data.json
+  var result = {};
+  for ( var i=0; i<data.length; i++){
+    var city = data[i].city;
+    if (city in result){
+      result[city].push(data[i])
+    }else {
+      result[city] = [data[i]]
+    }
+  }
+
+  return {
+    type: constants.INIT_CITY_LIST,
+    cityList: result,
+    srcCityList: data,
+  }};
 
 export const changeCurrentZoom = (value) => ({
   type: constants.CHANGE_CURRENT_ZOOM,
@@ -23,20 +37,7 @@ export const getCityList = () => {
     // ajax request
     var url = window.location.href
     axios.get(url + "/data.json").then((res) => {
-      const data = res.data.data
-
-      // 数据处理 原数据是data.json
-      var result = {};
-      for ( var i=0; i<data.length; i++){
-        var city = data[i].city;
-        if (city in result){
-          result[city].push(data[i])
-        }else {
-          result[city] = [data[i]]
-        }
-      }
-      dispatch(InitCityList(result)) // action change store
-
+      dispatch(InitCityList(res.data.data)) // action change store
       }).catch(() => { // ajax request error
         console.log("error")
     })

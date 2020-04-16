@@ -7,7 +7,7 @@ import {getCityList, changeCurrentCity,} from "./store/actionCreators"
 class VipMap extends Component {
 
   render() {
-    const {list, handleClick, currentCity, currentZoom} = this.props;
+    const {list,srcList, handleClick, currentCity, currentZoom} = this.props;
 
     return (
       <div >
@@ -31,10 +31,12 @@ class VipMap extends Component {
 
         <div style={{width: '80%', height: '700px', margin: '0 auto', border: '1px solid #000', marginTop: '2px',}}>
           <APILoader akay="X3dS7gyDF4AFBDzF9wWcn3CY49Di4sYQ">
-            <Map zoom={currentZoom} center={currentCity} enableScrollWheelZoom={true}/>
-            {/*<Map zoom={12} center={currentCity} enableScrollWheelZoom={true}/>*/}
-            {/*<Map center={currentCity} enableScrollWheelZoom={true}/>*/}
-            {/*<Map center={currentCity}/>*/}
+            <Map
+              zoom={currentZoom}
+              currentCity={currentCity}
+              center={currentCity}
+              enableScrollWheelZoom={true}
+            />
           </APILoader>
         </div>
       </div>
@@ -52,6 +54,7 @@ class VipMap extends Component {
 const mapState = (state) => {
   return {
     list: state.getIn(['vipmap','cityList']),
+    srcList: state.getIn(['vipmap','srcCityList']),
     currentCity: state.getIn(['vipmap','currentCity']),
     currentZoom: state.getIn(['vipmap','currentZoom']),
   }

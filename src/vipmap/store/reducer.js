@@ -9,12 +9,18 @@ const defaultState = fromJS({
 
 
 const changeCurrentCity = (state, action) => {
-  var result = {"currentCity": action.currentCity,}
-
-  if (action.currentZoom !== state.get('currentZoom')){
-    result['currentZoom'] = action.currentZoom
+  var result = {
+    "currentCity": action.currentCity,
+    "currentZoom": action.currentZoom,
   }
   return state.merge(result)
+}
+
+const initCityList = (state, action) => {
+  return state.merge({
+    cityList: action.cityList,
+    srcCityList: action.srcCityList
+  })
 }
 
 // state    整个DOM的数据库
@@ -23,7 +29,7 @@ const changeCurrentCity = (state, action) => {
 export default (state = defaultState, action) => {
   switch(action.type) {
     case constants.INIT_CITY_LIST:
-      return state.set("cityList", action.cityList)
+      return initCityList(state, action)
     case constants.CHANGE_CURRENT_CITY:
       return changeCurrentCity(state, action)
     default:
