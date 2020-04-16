@@ -3,8 +3,10 @@ import { fromJS} from 'immutable';
 
 const defaultState = fromJS({
   cityList: [],
-  currentCity: "北京",
-  currentZoom: 5,
+  srcCityList: [],
+  // currentCity: "北京",
+  currentCity: "上海",
+  currentZoom: 13,
 });
 
 

@@ -23,10 +23,8 @@ class VipMap extends Component {
 
           }
           <button onClick={() => handleClick("北京", 5)}>全国</button>
-          <div>
-            {currentZoom}
-            {currentCity}
-          </div>
+          {currentZoom}
+          {currentCity}
         </div>
 
         <div style={{width: '80%', height: '700px', margin: '0 auto', border: '1px solid #000', marginTop: '2px',}}>
