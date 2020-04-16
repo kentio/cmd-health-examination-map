@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.js": "/cmd-health-examination-map/static/js/main.aa157c0f.chunk.js",
+    "main.js.map": "/cmd-health-examination-map/static/js/main.aa157c0f.chunk.js.map",
+    "runtime-main.js": "/cmd-health-examination-map/static/js/runtime-main.2bdca440.js",
+    "runtime-main.js.map": "/cmd-health-examination-map/static/js/runtime-main.2bdca440.js.map",
+    "static/js/2.d878a3ce.chunk.js": "/cmd-health-examination-map/static/js/2.d878a3ce.chunk.js",
+    "static/js/2.d878a3ce.chunk.js.map": "/cmd-health-examination-map/static/js/2.d878a3ce.chunk.js.map",
+    "index.html": "/cmd-health-examination-map/index.html",
+    "precache-manifest.5e6ba57fa25055fef71ac119d71c78ea.js": "/cmd-health-examination-map/precache-manifest.5e6ba57fa25055fef71ac119d71c78ea.js",
+    "service-worker.js": "/cmd-health-examination-map/service-worker.js",
+    "static/js/2.d878a3ce.chunk.js.LICENSE.txt": "/cmd-health-examination-map/static/js/2.d878a3ce.chunk.js.LICENSE.txt",
+    "static/media/markers.png": "/cmd-health-examination-map/static/media/markers.fbb9e99f.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.2bdca440.js",
+    "static/js/2.d878a3ce.chunk.js",
+    "static/js/main.aa157c0f.chunk.js"
+  ]
+}
