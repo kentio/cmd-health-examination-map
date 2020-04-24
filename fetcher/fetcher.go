@@ -26,7 +26,7 @@ func Get(url string) (resp *http.Response, err error) {
 var rateLimiter = time.Tick(100 * time.Millisecond)
 
 func Fetch(url string) ([]byte, error) {
-	<-rateLimiter
+	//<-rateLimiter // 限流器
 	resp, err := Get(url)
 	if err != nil {
 		return nil, err

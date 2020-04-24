@@ -1,3 +1,3 @@
 # CMD VIP
 
-- 并发版spider（goroutine 不受控制）
+- 队列版，加强控制的爬虫
