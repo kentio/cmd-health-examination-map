@@ -8,6 +8,7 @@ import (
 	"github.com/kentio/cmd-health-examination-map/engine"
 	"github.com/kentio/cmd-health-examination-map/model"
 	"github.com/kentio/cmd-health-examination-map/parser"
+	"github.com/kentio/cmd-health-examination-map/scheduler"
 	"os"
 	"strings"
 )
@@ -19,10 +20,21 @@ func main() {
 	}
 	defer db.Close()
 
-	engine.Run(engine.Request{
+	e := engine.ConcurrentEngine{
+		Scheduler:   &scheduler.SimpleScheduler{},
+		WorkerCount: 10,
+	}
+
+	e.Run(engine.Request{
 		Url:        config.BaseUrl + config.RootUrl,
 		ParserFunc: parser.ParseCityList,
 	})
+
+	//engine.SimpleEngine{}.Run(engine.Request{
+	//	Url:        config.BaseUrl + config.RootUrl,
+	//	ParserFunc: parser.ParseCityList,
+	//})
+
 	// 108 to json file -> data.json
 	//dataToJson()
 

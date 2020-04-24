@@ -11,6 +11,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 )
 
 var UserAgent = browser.IPad()
@@ -22,9 +23,12 @@ func Get(url string) (resp *http.Response, err error) {
 	return client.Do(request)
 }
 
+var rateLimiter = time.Tick(100 * time.Millisecond)
+
 func Fetch(url string) ([]byte, error) {
+	<-rateLimiter
 	resp, err := Get(url)
-	if err != nil{
+	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
@@ -38,7 +42,6 @@ func Fetch(url string) ([]byte, error) {
 	utf8Reader := transform.NewReader(bodyReader, e.NewDecoder())
 	return ioutil.ReadAll(utf8Reader)
 }
-
 
 func determineEncoding(
 	r *bufio.Reader) encoding.Encoding {
